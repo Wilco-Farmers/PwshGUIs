@@ -16,8 +16,26 @@ class PwshGUI {
         $this.GUI.StartPosition = 'CenterScreen'
     }
 
-    [void]Display() {
-        $this.GUI.ShowDialog()
+    [System.Object]Display() {
+        $result = $this.GUI.ShowDialog()
+        if ($result -eq [System.Windows.Forms.DialogResult]::OK)
+        {
+            $ListBox = $this.GetListBoxResults()
+            return $ListBox.SelectedItems
+        }
+        else {
+            return $null
+        }
+    }
+
+    [System.Windows.Forms.Listbox]GetListBoxResults() {
+        $x = $this.GUI.Controls
+        foreach ($Control in $x) {
+            if ($Control.GetType().Name -eq 'ListBox') {
+                return $Control
+            }
+        }
+        return $null
     }
 
     #Bool passed to determine if it is an accept button. If not passed, it will be a cancel button.
@@ -27,9 +45,11 @@ class PwshGUI {
         $Button.Size = New-Object System.Drawing.Size($BtnWidth,$BtnHeight)
         $Button.Text = $Text
         if ($AcceptButton) {
+            $Button.DialogResult = [System.Windows.Forms.DialogResult]::OK
             $this.GUI.AcceptButton = $Button
         }
         else {
+            $Button.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
             $this.GUI.CancelButton = $Button
         }
         $this.GUI.Controls.Add($Button)
@@ -47,31 +67,6 @@ class PwshGUI {
     [void]RemoveOptionsButtons() {
         $this.GUI.Controls.Remove($this.GUI.AcceptButton)
         $this.GUI.Controls.Remove($this.GUI.CancelButton)
-    }
-
-    #Creates a List and centers it above the buttons.
-    [void]AddListBox([string]$Text) {
-        # $ListBox = New-Object System.Windows.Forms.Listbox
-        # $ListBox.Location = New-Object System.Drawing.Point(10,40)
-        # $ListBox.Size = New-Object System.Drawing.Size(260,20)
-        
-        # $listBox.SelectionMode = 'MultiExtended'
-        
-        # [void] $listBox.Items.Add('Item 1')
-        # [void] $listBox.Items.Add('Item 2')
-        # [void] $listBox.Items.Add('Item 3')
-        # [void] $listBox.Items.Add('Item 4')
-        # [void] $listBox.Items.Add('Item 5')
-        
-        # $listBox.Height = 70
-        # $this.GUI.Controls.Add($listBox)
-        # $this.GUI.Topmost = $true
-
-        # $ListBox = New-Object System.Windows.Forms.ListBox
-        # $ListBox.Location = New-Object System.Drawing.Point($ListX,$ListY)
-        # $ListBox.Size = New-Object System.Drawing.Size($ListWidth,$ListHeight)
-        # $ListBox.Text = $Text
-        # $this.GUI.Controls.Add($ListBox)
     }
 
     [void]AddTopText([string]$Text) {
@@ -100,37 +95,32 @@ class PwshGUI {
         $LabelHeight = $this.GUI.Height * 0.10
         $LabelWidth = $this.GUI.Width * 0.96
         $LabelX = ($this.GUI.Width * 0.02) #right aligned
-        $LabelY = ($this.GUI.AcceptButton.Location.Y - $LabelHeight)#middle
+        $LabelY = ($this.GUI.AcceptButton.Location.Y - $LabelHeight / 2)#middle
         $Label.Location = New-Object System.Drawing.Point($LabelX,$LabelY)
         $Label.Size = New-Object System.Drawing.Size($LabelWidth,$LabelHeight)
         $Label.Text = $Text
         $this.GUI.Controls.Add($Label)
     }
 
-    [void]AddMultiSelectionList([System.Object]$ItemsToAdd, $Label) {
-        # $this.AddListBox($Label)
-
-        # $listBox.SelectionMode = 'MultiExtended'
-
-        # [void] $listBox.Items.Add('Item 1')
-        # [void] $listBox.Items.Add('Item 2')
-        # [void] $listBox.Items.Add('Item 3')
-        # [void] $listBox.Items.Add('Item 4')
-        # [void] $listBox.Items.Add('Item 5')
-
-        # $listBox.Height = 70
-        # $this.GUI.form.Controls.Add($listBox)
-        # $this.GUI.form.Topmost = $true
-    }
-
-    [void]Show() {
-        $this.GUI.ShowDialog()
+    [void]AddMultiSelectionList([System.Object]$ItemsToAdd) {
+        if ($this.GUI.Height -lt 500) {
+            $this.GUI.Height = 500
+        }
+        if ($this.GUI.Width -lt 500) {
+            $this.GUI.Width = 500
+        }
+        $LBX = ($this.GUI.Width * 0.02) #right aligned
+        $LBY = ($this.GUI.Height * 0.10)  
+        $ListBox = New-Object System.Windows.Forms.Listbox
+        $ListBox.Location = New-Object System.Drawing.Point($LBX,$LBY)
+        $LBHeight = $this.GUI.Height * 0.65
+        $LBWidth = $this.GUI.Width * 0.92
+        $ListBox.Size = New-Object System.Drawing.Size($LBWidth,$LBHeight)
+        $ListBox.SelectionMode = 'MultiExtended'
+        foreach ($Item in $ItemsToAdd) {
+            [void] $ListBox.Items.Add($Item)
+        }
+        $this.GUI.Controls.Add($ListBox)
+        $this.GUI.Topmost = $true
     }
 }
-
-
-$GUI = [PwshGUI]::new("Test", 300,200)
-$GUI.AddOptionsButtons("Accept", "Cancel", 30, 70)
-$GUI.AddTextOverOptionsButtons("              Ctrl + Click to select multiple items.")
-$GUI.AddTopText("Select from the list of available user changes:")
-$GUI.Show()
