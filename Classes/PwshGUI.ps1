@@ -2,7 +2,7 @@ class PwshGUI {
     [string]$Title
     [int32]$Width
     [int32]$Height
-    [System.Windows.Forms.Form]$GUI
+    $GUI
     #Constructor
     PwshGUI ([string]$Title, [int32]$Width, [int32]$Height) {
         Add-Type -AssemblyName System.Windows.Forms
@@ -22,8 +22,6 @@ class PwshGUI {
 
     #Bool passed to determine if it is an accept button. If not passed, it will be a cancel button.
     [void]AddButton([string]$Text, [int32]$BtnHeight, [int32]$BtnWidth, [int32]$BtnX, [int32]$BtnY, [bool]$AcceptButton) {
-        # $BtnX = (($this.Width - ($BtnWidth * 2))/2) #center of X Axis - width of this button and cancel button
-        # $BtnY = $this.Height - ($BtnHeight * 3) #Slightly above the bottom of the y axis.
         $Button = New-Object System.Windows.Forms.Button
         $Button.Location = New-Object System.Drawing.Point($BtnX,$BtnY)
         $Button.Size = New-Object System.Drawing.Size($BtnWidth,$BtnHeight)
@@ -53,17 +51,9 @@ class PwshGUI {
 
     #Creates a List and centers it above the buttons.
     [void]AddListBox([string]$Text) {
-        [int32]$LabelX = ($this.GUI.Width * 0.02)
-        [int32]$LabelY = ($this.GUI.Height * 0.02)
-        $Label = New-Object System.Windows.Forms.Label
-        $Label.Location = New-Object System.Drawing.Point($LabelX,$LabelY)
-        $Label.Size = New-Object System.Drawing.Size(280,20)
-        $Label.Text = $Text
-        $this.GUI.Controls.Add($Label)
-        
-        # $listBox = New-Object System.Windows.Forms.Listbox
-        # $listBox.Location = New-Object System.Drawing.Point(10,40)
-        # $listBox.Size = New-Object System.Drawing.Size(260,20)
+        # $ListBox = New-Object System.Windows.Forms.Listbox
+        # $ListBox.Location = New-Object System.Drawing.Point(10,40)
+        # $ListBox.Size = New-Object System.Drawing.Size(260,20)
         
         # $listBox.SelectionMode = 'MultiExtended'
         
@@ -84,8 +74,41 @@ class PwshGUI {
         # $this.GUI.Controls.Add($ListBox)
     }
 
+    [void]AddTopText([string]$Text) {
+        if ($this.GUI.Height -lt 175) {
+            $this.GUI.Height = 175
+        }
+        if ($this.GUI.Width -lt 300) {
+            $this.GUI.Width = 300
+        }
+        $LabelX = ($this.GUI.Width * 0.02) #top right
+        $LabelY = ($this.GUI.Height * 0.02) #top right
+        $Label = New-Object System.Windows.Forms.Label
+        $Label.Location = New-Object System.Drawing.Point($LabelX,$LabelY)
+        $LabelHeight = $this.GUI.Height * 0.10
+        $LabelWidth = $this.GUI.Width * 0.96
+        $Label.Size = New-Object System.Drawing.Size($LabelWidth,$LabelHeight)
+        $Label.Text = $Text
+        $this.GUI.Controls.Add($Label)
+    }
+
+    [void]AddTextOverOptionsButtons([string]$Text) {
+        if ($this.GUI.Height -lt 100) {
+            $this.GUI.Height = 100
+        }
+        $Label = New-Object System.Windows.Forms.Label
+        $LabelHeight = $this.GUI.Height * 0.10
+        $LabelWidth = $this.GUI.Width * 0.96
+        $LabelX = ($this.GUI.Width * 0.02) #right aligned
+        $LabelY = ($this.GUI.AcceptButton.Location.Y - $LabelHeight)#middle
+        $Label.Location = New-Object System.Drawing.Point($LabelX,$LabelY)
+        $Label.Size = New-Object System.Drawing.Size($LabelWidth,$LabelHeight)
+        $Label.Text = $Text
+        $this.GUI.Controls.Add($Label)
+    }
+
     [void]AddMultiSelectionList([System.Object]$ItemsToAdd, $Label) {
-        $this.AddListBox($Label)
+        # $this.AddListBox($Label)
 
         # $listBox.SelectionMode = 'MultiExtended'
 
@@ -106,7 +129,8 @@ class PwshGUI {
 }
 
 
-$GUI = [PwshGUI]::new("Test", 1000,1000)
+$GUI = [PwshGUI]::new("Test", 300,200)
 $GUI.AddOptionsButtons("Accept", "Cancel", 30, 70)
-$GUI.AddMultiSelectionList("Test", "Test")
+$GUI.AddTextOverOptionsButtons("              Ctrl + Click to select multiple items.")
+$GUI.AddTopText("Select from the list of available user changes:")
 $GUI.Show()
