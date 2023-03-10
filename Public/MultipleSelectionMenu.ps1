@@ -45,7 +45,7 @@ function SelectionMenu {
         [Parameter(Mandatory=$false)]
         [int32]$Height = 500
     )
-    $GUI = [PwshGUI]::new($Title, $Width, $Height)
+    $GUI = [PwshGUI]::new($Title, $Width, $Height, "MultiSelection")
     $GUI.AddMultiSelectionList($ItemsInMenu)
     $GUI.AddOptionsButtons($OKButtonText, $CancelButtonText, 30, 70)
     $GUI.AddTextOverOptionsButtons($BottomText)
@@ -53,3 +53,5 @@ function SelectionMenu {
     $GUI.AddMultiSelectionList($ItemsInMenu)
     return $GUI.Display()
 }
+
+SelectionMenu -Title "ADP User Notifications" -ItemsInMenu @("Item1", "Item2", "Item3", "Item4", "Item5") -OKButtonText "Process" -CancelButtonText "Cancel" -TopText "Select from the following user changes:" -BottomText "                                           Ctrl + Click to select multiple items"
