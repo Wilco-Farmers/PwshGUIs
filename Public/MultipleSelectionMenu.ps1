@@ -26,7 +26,7 @@ An ArrayList of the selected items. This only occurs if the OK button is pressed
 .NOTES
 In the PwshGUI Class, the minimum height and width of the form is 500x500. If the provided Height and Width are less than 500, the form will be set to 500x500.
 #>
-function SelectionMenu {
+function MultipleSelectionMenu {
     param (
         [Parameter(Mandatory=$true)]
         [string]$Title,
@@ -53,5 +53,3 @@ function SelectionMenu {
     $GUI.AddMultiSelectionList($ItemsInMenu)
     return $GUI.Display()
 }
-
-SelectionMenu -Title "ADP User Notifications" -ItemsInMenu @("Item1", "Item2", "Item3", "Item4", "Item5") -OKButtonText "Process" -CancelButtonText "Cancel" -TopText "Select from the following user changes:" -BottomText "                                           Ctrl + Click to select multiple items"
