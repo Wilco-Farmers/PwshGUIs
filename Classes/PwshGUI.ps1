@@ -19,6 +19,7 @@ class PwshGUI {
     }
 
     [System.Object]Display() {
+        $this.GUI.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
         $result = $this.GUI.ShowDialog()
         if ($result -eq [System.Windows.Forms.DialogResult]::OK)
         {
@@ -113,11 +114,33 @@ class PwshGUI {
         $LabelHeight = $this.GUI.Height * 0.10
         $LabelWidth = $this.GUI.Width * 0.96
         $LabelX = ($this.GUI.Width * 0.02) #right aligned
-        $LabelY = ($this.GUI.AcceptButton.Location.Y - $LabelHeight / 2)#middle
+        $LabelY = ($this.GUI.AcceptButton.Location.Y - $LabelHeight / 1.75)
         $Label.Location = New-Object System.Drawing.Point($LabelX,$LabelY)
         $Label.Size = New-Object System.Drawing.Size($LabelWidth,$LabelHeight)
         $Label.Text = $Text
+        $Label.AutoSize = $true
         $this.GUI.Controls.Add($Label)
+    }
+
+    [void]AddSingleSelectionList([System.Object]$ItemsToAdd) {
+        if ($this.GUI.Height -lt 250) {
+            $this.GUI.Height = 250
+        }
+        if ($this.GUI.Width -lt 250) {
+            $this.GUI.Width = 250
+        }
+        $LBX = ($this.GUI.Width * 0.02) #right aligned
+        $LBY = ($this.GUI.Height * 0.15)  
+        $ListBox = New-Object System.Windows.Forms.ListBox
+        $ListBox.Location = New-Object System.Drawing.Point($LBX,$LBY)
+        $LBHeight = $this.GUI.Height * 0.50
+        $LBWidth = $this.GUI.Width * 0.92
+        $ListBox.Size = New-Object System.Drawing.Size($LBWidth,$LBHeight)
+        foreach ($Item in $ItemsToAdd) {
+            [void] $ListBox.Items.Add($Item)
+        }
+        $this.GUI.Controls.Add($ListBox)
+        $this.GUI.Topmost = $true
     }
 
     [void]AddMultiSelectionList([System.Object]$ItemsToAdd) {
