@@ -50,6 +50,5 @@ function MultipleSelectionMenu {
     $GUI.AddOptionsButtons($OKButtonText, $CancelButtonText, 30, 70)
     $GUI.AddTextOverOptionsButtons($BottomText)
     $GUI.AddTopText($TopText)
-    $GUI.AddMultiSelectionList($ItemsInMenu)
     return $GUI.Display()
 }
