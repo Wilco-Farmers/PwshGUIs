@@ -2,9 +2,10 @@ class PwshGUI {
     [string]$Title
     [int32]$Width
     [int32]$Height
-    $GUI
+    [System.Windows.Forms.Form]$GUI
+    [string]$GUIType #YesNo, MultiSelection, SingleSelection    
     #Constructor
-    PwshGUI ([string]$Title, [int32]$Width, [int32]$Height) {
+    PwshGUI ([string]$Title, [int32]$Width, [int32]$Height, [string]$GUIType) {
         Add-Type -AssemblyName System.Windows.Forms
         Add-Type -AssemblyName System.Drawing
         $this.Title = $Title
@@ -14,16 +15,32 @@ class PwshGUI {
         $this.GUI.Text = $Title
         $this.GUI.Size = New-Object System.Drawing.Size($Width,$Height)
         $this.GUI.StartPosition = 'CenterScreen'
+        $this.GUIType = $GUIType
     }
 
     [System.Object]Display() {
         $result = $this.GUI.ShowDialog()
         if ($result -eq [System.Windows.Forms.DialogResult]::OK)
         {
-            $ListBox = $this.GetListBoxResults()
-            return $ListBox.SelectedItems
+            switch ($this.GUIType) {
+                "YesNo" { 
+                    return $true
+                }
+                "MultiSelection" {
+                    $ListBox = $this.GetListBoxResults()
+                    return $ListBox.SelectedItems
+                }
+                "SingleSelection" {
+                    $ListBox = $this.GetListBoxResults()
+                    return $ListBox.SelectedItem
+                }
+            }
+            return $null
         }
         else {
+            if ($this.GUIType -eq "YesNo") {
+                return $false
+            }
             return $null
         }
     }
@@ -79,8 +96,9 @@ class PwshGUI {
         $LabelX = ($this.GUI.Width * 0.02) #top right
         $LabelY = ($this.GUI.Height * 0.02) #top right
         $Label = New-Object System.Windows.Forms.Label
+        $Label.AutoSize = $true
         $Label.Location = New-Object System.Drawing.Point($LabelX,$LabelY)
-        $LabelHeight = $this.GUI.Height * 0.10
+        $LabelHeight = $this.GUI.Height * 0.08
         $LabelWidth = $this.GUI.Width * 0.96
         $Label.Size = New-Object System.Drawing.Size($LabelWidth,$LabelHeight)
         $Label.Text = $Text
