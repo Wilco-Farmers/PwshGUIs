@@ -11,7 +11,7 @@ function InformationalPopup {
 
     )
     $GUI = [PwshGUI]::new($Title, $Width, $Height, "Informational")
-    $GUI.AddButton("OK", 30, 70, $Height - 30 * 2 , $Width / 2 - 70, $true)
+    $GUI.AddButton("OK", 30, 70, $Width / 2 - 35, $Height / 2, $true)
     $GUI.AddTopText($Message)
     $Gui.Display() | Out-Null
 }

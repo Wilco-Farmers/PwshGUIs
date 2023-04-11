@@ -10,7 +10,7 @@ Add-Type -AssemblyName System.Windows.Forms
 }
 
 #import all private files
-(Get-ChildItem -ErrorAction SilentlyContinue -Path $($PSScriptRoot + "\Private")) | ForEach-Object {
-    . $_.FullName 
-}
+# (Get-ChildItem -ErrorAction SilentlyContinue -Path $($PSScriptRoot + "\Private")) | ForEach-Object {
+#     . $_.FullName 
+# }
 
