@@ -60,7 +60,7 @@ class PwshGUI {
     }
 
     [System.Windows.Forms.Listbox]GetListBoxResults() {
-        $x = $this.GUI.Controls.GroupBox.Controls
+        $x = $this.OuterGroupBox.Controls
         foreach ($Control in $x) {
             if ($Control.GetType().Name -eq 'ListBox') {
                 return $Control
@@ -70,7 +70,7 @@ class PwshGUI {
     }
 
     [System.Windows.Forms.TextBox]GetTextBoxResults() {
-        $x = $this.GUI.Controls.GroupBox.Controls
+        $x = $this.OuterGroupBox.Controls
         foreach ($Control in $x) {
             if ($Control.GetType().Name -eq 'TextBox') {
                 return $Control
