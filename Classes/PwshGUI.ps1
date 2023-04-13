@@ -3,11 +3,14 @@ class PwshGUI {
     [int32]$Width
     [int32]$Height
     [System.Windows.Forms.Form]$GUI
-    [string]$GUIType #YesNo, MultiSelection, SingleSelection    
+    [System.Windows.Forms.GroupBox]$OuterGroupBox
+    [string]$GUIType #YesNo, MultiSelection, SingleSelection, InputBox    
+    
     #Constructor
     PwshGUI ([string]$Title, [int32]$Width, [int32]$Height, [string]$GUIType) {
         Add-Type -AssemblyName System.Windows.Forms
         Add-Type -AssemblyName System.Drawing
+        [System.Windows.Forms.Application]::EnableVisualStyles() #enables use of group boxes.
         $this.Title = $Title
         $this.Width = $Width
         $this.Height = $Height
@@ -16,10 +19,16 @@ class PwshGUI {
         $this.GUI.Size = New-Object System.Drawing.Size($Width,$Height)
         $this.GUI.StartPosition = 'CenterScreen'
         $this.GUIType = $GUIType
+        $this.GUI.BackColor = [System.Drawing.Color]::FromArgb(224, 201, 161)
+        $this.OuterGroupBox = New-Object System.Windows.Forms.GroupBox
+        $this.OuterGroupBox.Location = New-Object System.Drawing.Point(10,10)
+        $this.OuterGroupBox.Height = $this.Height - 60
+        $this.OuterGroupBox.Width = $this.Width - 34
+        $this.GUI.Controls.Add($this.OuterGroupBox)
+        $this.GUI.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
     }
 
     [System.Object]Display() {
-        $this.GUI.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
         $result = $this.GUI.ShowDialog()
         if ($result -eq [System.Windows.Forms.DialogResult]::OK)
         {
@@ -35,6 +44,10 @@ class PwshGUI {
                     $ListBox = $this.GetListBoxResults()
                     return $ListBox.SelectedItem
                 }
+                "InputBox" {
+                    $TextBox = $this.GetTextBoxResults()
+                    return $TextBox.Text
+                }
             }
             return $null
         }
@@ -47,7 +60,7 @@ class PwshGUI {
     }
 
     [System.Windows.Forms.Listbox]GetListBoxResults() {
-        $x = $this.GUI.Controls
+        $x = $this.GUI.Controls.GroupBox.Controls
         foreach ($Control in $x) {
             if ($Control.GetType().Name -eq 'ListBox') {
                 return $Control
@@ -56,12 +69,31 @@ class PwshGUI {
         return $null
     }
 
+    [System.Windows.Forms.TextBox]GetTextBoxResults() {
+        $x = $this.GUI.Controls.GroupBox.Controls
+        foreach ($Control in $x) {
+            if ($Control.GetType().Name -eq 'TextBox') {
+                return $Control
+            }
+        }
+        return $null
+    }
+
+    [void]AddInputBox([int32]$InputBoxHeight, [int32]$InputBoxWidth, [int32]$InputBoxX, [int32]$InputBoxY) {
+        $InputBox = New-Object System.Windows.Forms.TextBox
+        $InputBox.Location = New-Object System.Drawing.Point($InputBoxX,$InputBoxY)
+        $InputBox.Size = New-Object System.Drawing.Size($InputBoxWidth, $InputBoxHeight)
+        $this.OuterGroupBox.Controls.AddRange(@($InputBox))
+    }
+
     #Bool passed to determine if it is an accept button. If not passed, it will be a cancel button.
     [void]AddButton([string]$Text, [int32]$BtnHeight, [int32]$BtnWidth, [int32]$BtnX, [int32]$BtnY, [bool]$AcceptButton) {
         $Button = New-Object System.Windows.Forms.Button
         $Button.Location = New-Object System.Drawing.Point($BtnX,$BtnY)
         $Button.Size = New-Object System.Drawing.Size($BtnWidth,$BtnHeight)
         $Button.Text = $Text
+        $Button.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
+        $Button.BackColor = [System.Drawing.Color]::FromArgb(1, 60, 90)
         if ($AcceptButton) {
             $Button.DialogResult = [System.Windows.Forms.DialogResult]::OK
             $this.GUI.AcceptButton = $Button
@@ -70,7 +102,7 @@ class PwshGUI {
             $Button.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
             $this.GUI.CancelButton = $Button
         }
-        $this.GUI.Controls.Add($Button)
+        $this.OuterGroupBox.Controls.Add($Button)
     }
 
     #Adds two buttons to the bottom of the form. One is the accept button, one is the cancel button.
@@ -88,22 +120,7 @@ class PwshGUI {
     }
 
     [void]AddTopText([string]$Text) {
-        if ($this.GUI.Height -lt 175) {
-            $this.GUI.Height = 175
-        }
-        if ($this.GUI.Width -lt 300) {
-            $this.GUI.Width = 300
-        }
-        $LabelX = ($this.GUI.Width * 0.02) #top right
-        $LabelY = ($this.GUI.Height * 0.02) #top right
-        $Label = New-Object System.Windows.Forms.Label
-        $Label.AutoSize = $true
-        $Label.Location = New-Object System.Drawing.Point($LabelX,$LabelY)
-        $LabelHeight = $this.GUI.Height * 0.08
-        $LabelWidth = $this.GUI.Width * 0.96
-        $Label.Size = New-Object System.Drawing.Size($LabelWidth,$LabelHeight)
-        $Label.Text = $Text
-        $this.GUI.Controls.Add($Label)
+        $this.OuterGroupBox.Text = $Text
     }
 
     [void]AddTextOverOptionsButtons([string]$Text) {
