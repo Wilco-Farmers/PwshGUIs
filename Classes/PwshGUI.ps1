@@ -146,17 +146,18 @@ class PwshGUI {
         if ($this.GUI.Width -lt 250) {
             $this.GUI.Width = 250
         }
-        $LBX = ($this.GUI.Width * 0.02) #right aligned
-        $LBY = ($this.GUI.Height * 0.15)  
+        $LBX = ($this.OuterGroupBox.Width * 0.02) #right aligned
+        $LBY = ($this.OuterGroupBox.Height * 0.15)  
         $ListBox = New-Object System.Windows.Forms.ListBox
         $ListBox.Location = New-Object System.Drawing.Point($LBX,$LBY)
-        $LBHeight = $this.GUI.Height * 0.50
-        $LBWidth = $this.GUI.Width * 0.92
+        $LBHeight = $this.OuterGroupBox.Height * 0.50
+        $LBWidth = $this.OuterGroupBox.Width * 0.92
         $ListBox.Size = New-Object System.Drawing.Size($LBWidth,$LBHeight)
+        $ListBox.BackColor = [System.Drawing.Color]::FromArgb(224, 201, 161)
         foreach ($Item in $ItemsToAdd) {
             [void] $ListBox.Items.Add($Item)
         }
-        $this.GUI.Controls.Add($ListBox)
+        $this.OuterGroupBox.Controls.Add($ListBox)
         $this.GUI.Topmost = $true
     }
 
@@ -167,18 +168,19 @@ class PwshGUI {
         if ($this.GUI.Width -lt 500) {
             $this.GUI.Width = 500
         }
-        $LBX = ($this.GUI.Width * 0.02) #right aligned
-        $LBY = ($this.GUI.Height * 0.10)  
+        $LBX = ($this.OuterGroupBox.Width * 0.02) #right aligned
+        $LBY = ($this.OuterGroupBox.Height * 0.10)  
         $ListBox = New-Object System.Windows.Forms.Listbox
         $ListBox.Location = New-Object System.Drawing.Point($LBX,$LBY)
-        $LBHeight = $this.GUI.Height * 0.65
-        $LBWidth = $this.GUI.Width * 0.92
+        $LBHeight = $this.OuterGroupBox.Height * 0.65
+        $LBWidth = $this.OuterGroupBox.Width * 0.92
         $ListBox.Size = New-Object System.Drawing.Size($LBWidth,$LBHeight)
         $ListBox.SelectionMode = 'MultiExtended'
+        $ListBox.BackColor = [System.Drawing.Color]::FromArgb(224, 201, 161)
         foreach ($Item in $ItemsToAdd) {
             [void] $ListBox.Items.Add($Item)
         }
-        $this.GUI.Controls.Add($ListBox)
+        $this.OuterGroupBox.Controls.Add($ListBox)
         $this.GUI.Topmost = $true
     }
 }
