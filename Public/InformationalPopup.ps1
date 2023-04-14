@@ -5,7 +5,7 @@ function InformationalPopup {
         [parameter(Mandatory=$true)]
         [string]$Message,
         [parameter(Mandatory=$false)]
-        [int32]$Width = 300,
+        [int32]$Width = 325,
         [parameter(Mandatory=$false)]
         [int32]$Height = 200
 
