@@ -1,5 +1,5 @@
 Add-Type -AssemblyName System.Windows.Forms
-
+Add-Type -AssemblyName PresentationFramework
 #import all classes
 (Get-ChildItem -Path $($PSScriptRoot + "\Classes")) | ForEach-Object {
     . $_.FullName 

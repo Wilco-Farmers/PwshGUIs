@@ -10,8 +10,13 @@ function InformationalPopup {
         [int32]$Height = 200
 
     )
-    $GUI = [PwshGUI]::new($Title, $Width, $Height, "Informational")
-    $GUI.AddButton("OK", 30, 70, $Width / 2 - 35, $Height / 2, $true)
-    $GUI.AddTopText($Message)
-    $Gui.Display() | Out-Null
+    #Below line loads the XML file defining the GUI, and loads the corresponding variables into the XML
+    [XML]$Form = (Get-Content -Path ($PSScriptRoot + "\..\XAML\InformationalGUI.xml")).Replace("`$Title",$Title).Replace("`$Content",$Message).Replace("`$Height",$Height).Replace("`$Width",$Width)
+    $NodeReader = (New-Object System.Xml.XmlNodeReader $Form)
+    $Window = [Windows.Markup.XamlReader]::Load($NodeReader)
+    $Button = $Window.FindName("OkButton")
+    $Button.Add_Click({ #Action that occurs when button is clicked
+        $Window.Close()
+    })
+    $Window.ShowDialog() | Out-Null
 }
