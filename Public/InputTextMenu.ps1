@@ -13,7 +13,7 @@ function InputTextMenu {
         [string]$Location  = "BottomCenter"
 
     )
-    $GUI = [PwshGUI]::new($Title, $Width, $Height, "")
+    $GUI = [PwshGUI]::new($Title, $Width, $Height, "InputBox")
     #GB stands for Group Box which is a container for other controls that is set to 95% of the total width and height of the form.
     $GBWidth = $GUI.OuterGroupBox.Width
     $GBHeight = $GUI.OuterGroupBox.Height
