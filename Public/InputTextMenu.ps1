@@ -3,32 +3,38 @@ function InputTextMenu {
         [parameter(Mandatory=$true)]
         [string]$Title,
         [parameter(Mandatory=$true)]
-        [string]$Label,
+        [string]$LabelPrompt,
         [parameter(Mandatory=$false)]
-        [int32]$Width = 400,
+        [int32]$Width = 525,
         [parameter(Mandatory=$false)]
-        [int32]$Height = 175,
+        [int32]$Height = 300,
+        [parameter(Mandatory=$true)]
+        [string]$MainContent,
         [parameter(Mandatory=$false)]
-        [ValidateSet("BottomCenter", "MidCenter")]
-        [string]$Location  = "BottomCenter"
+        [string]$OKButtonText = "OK",
+        [parameter(Mandatory=$false)]
+        [string]$CancelButtonText = "Cancel"
 
     )
-    $GUI = [PwshGUI]::new($Title, $Width, $Height, "InputBox")
-    #GB stands for Group Box which is a container for other controls that is set to 95% of the total width and height of the form.
-    $GBWidth = $GUI.OuterGroupBox.Width
-    $GBHeight = $GUI.OuterGroupBox.Height
-    $Xlocation = ($GUI.OuterGroupBox.Location.X + ($GBWidth * 0.05))
-    switch ($Location) {
-        "BottomCenter" {
-            $YLocation = $GBHeight - 60
-        }
-        "MidCenter" {
-            $YLocation = $GBHeight / 2 - 30
-        }
+    #Below line loads the XML file defining the GUI, and loads the corresponding variables into the XML
+    [XML]$Form = (Get-Content -Path ($PSScriptRoot + "\..\XAML\InputTextGUI.xml")).Replace("`$OKButtonText",$OKButtonText).Replace("`$CancelButtonText",$CancelButtonText).Replace("`$Title",$Title).Replace("`$LabelPrompt",$LabelPrompt).Replace("`$Height",$Height).Replace("`$Width",$Width).Replace("`$MainContent",$MainContent)
+    $NodeReader = (New-Object System.Xml.XmlNodeReader $Form)
+    $Window = [Windows.Markup.XamlReader]::Load($NodeReader)
+    $OKButton = $Window.FindName("OkButton")
+    $OKButton.Add_Click({ #Action that occurs when button is clicked
+        $Window.Close()
+    })
+    $CancelButton = $Window.FindName("CancelButton")
+    $CancelButton.Add_Click({
+        $Window.Close()
+        $CancelButton.IsCancel = $true
+    })
+    $Window.ShowDialog() | Out-Null
+    if ($CancelButton.IsCancel -eq $true) {
+        return
     }
-    $GUI.AddButton("OK", 30, 70, $GBWidth / 2 - 70, $YLocation + 25, $true)
-    $GUI.AddButton("Cancel", 30, 70, $GBWidth / 2, $YLocation + 25, $false)
-    $GUI.AddInputBox(30, ($GBWidth - ($GBWidth * 0.15)), $XLocation, $YLocation)
-    $GUI.AddTopText($Label)
-    return $GUI.Display()
+    else {
+        $TextBox = $Window.FindName("TextBox")
+        return $TextBox.Text
+    }
 }

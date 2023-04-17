@@ -1,0 +1,35 @@
+<Window 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    Title="$Title" Height="$Height" Width="$Width" ResizeMode="NoResize">
+    <Grid Name="MainForm" Background="#FFDDC9A4">
+        <Label VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="92" Width="304" Grid.Column="1"/>
+        <Label Content="$LabelPrompt" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="72,116,0,0" VerticalAlignment="Top" Width="115" RenderTransformOrigin="0.5,0.5" FontSize="14">
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-0.171"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <TextBox Name="TextBox" HorizontalAlignment="Left" Margin="197,120,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="265" Height="22"/>
+        <Button Name="OkButton" Content="$OKButtonText" HorizontalAlignment="Left" Margin="133,195,0,0" VerticalAlignment="Top" Height="50" Width="117" Background="#FF033C5A" Foreground="White" FontWeight="Normal" FontSize="14" FontStyle="Normal">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+        <Label HorizontalAlignment="Left" Margin="72,30,0,0" VerticalAlignment="Top" Height="72" Width="390">
+            <TextBlock FontSize="14" TextWrapping="WrapWithOverflow" Text="$MainContent" Height="62" Width="380"/>
+        </Label>
+        <Button Name="CancelButton" Content="$CancelButtonText" HorizontalAlignment="Left" Margin="255,195,0,0" VerticalAlignment="Top" Height="50" Width="117" Background="#FF033C5A" Foreground="White" FontWeight="Normal" FontSize="14" FontStyle="Normal" RenderTransformOrigin="0.446,0.487">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+    </Grid>
+</Window>
