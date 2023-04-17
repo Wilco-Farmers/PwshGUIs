@@ -1,6 +1,6 @@
 <Window 
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    Title="$Title" Height="$Height" Width="$Width">
+    Title="$Title" Height="$Height" Width="$Width" ResizeMode="NoResize">
     <Grid Name="MainForm" Background="#FFDDC9A4">
         <Button Name="OkButton" Content="OK" HorizontalAlignment="Center" Margin="0,124,0,0" VerticalAlignment="Top" Height="25" Width="100" Background="#FF033C5A" Foreground="White" FontWeight="Normal" FontSize="14" FontStyle="Normal">
             <Button.Resources>
