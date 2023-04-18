@@ -27,16 +27,32 @@ function YesNoMenu {
         [Parameter(Mandatory=$true)]
         [string]$Text,
         [Parameter(Mandatory=$false)]
-        [int32]$Width = 300,
+        [int32]$Width = 375,
         [Parameter(Mandatory=$false)]
-        [int32]$Height = 175,
+        [int32]$Height = 225,
         [Parameter(Mandatory=$false)]
         [string]$YesButtonText = "Yes",
         [Parameter(Mandatory=$false)]
         [string]$NoButtonText = "No"
     )
-    $GUI = [PwshGUI]::new($Title, $Width, $Height, "YesNo")
-    $GUI.AddOptionsButtons($YesButtonText, $NoButtonText, 30, 70)
-    $GUI.AddTopText($Text)
-    return $GUI.Display()
+    #Below line loads the XML file defining the GUI, and loads the corresponding variables into the XML
+    [XML]$Form = (Get-Content -Path ($PSScriptRoot + "\..\XAML\YesNoGUI.xml")).Replace("`$YesButtonText",$YesButtonText).Replace("`$NoButtonText",$NoButtonText).Replace("`$Title",$Title).Replace("`$Height",$Height).Replace("`$Width",$Width).Replace("`$MainContent",$Text)
+    $NodeReader = (New-Object System.Xml.XmlNodeReader $Form)
+    $Window = [Windows.Markup.XamlReader]::Load($NodeReader)
+    $OKButton = $Window.FindName("YesButton")
+    $OKButton.Add_Click({ #Action that occurs when button is clicked
+        $Window.Close()
+    })
+    $CancelButton = $Window.FindName("NoButton")
+    $CancelButton.Add_Click({
+        $Window.Close()
+        $CancelButton.IsCancel = $true
+    })
+    $Window.ShowDialog() | Out-Null
+    if ($CancelButton.IsCancel -eq $true) {
+        return $false
+    }
+    else {
+        return $true
+    }
 }

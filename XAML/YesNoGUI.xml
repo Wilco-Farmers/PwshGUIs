@@ -1,0 +1,23 @@
+<Window 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    Title="$Title" Height="$Height" Width="$Width" ResizeMode="NoResize">
+    <Grid Name="MainForm" Background="#FFDDC9A4" Margin="0,0,0,0">
+        <Label HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="116" Width="344">
+            <TextBlock TextAlignment="Center" FontSize="14" TextWrapping="WrapWithOverflow" Text="$MainContent" Height="106" Width="334"/>
+        </Label>
+        <Button Name="YesButton" Content="$YesButtonText" HorizontalAlignment="Left" Margin="104,100,0,0" VerticalAlignment="Top" Height="49" Width="84" Background="#FF033C5A" Foreground="White" FontWeight="Normal" FontSize="14" FontStyle="Normal">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+        <Button Name="NoButton" Content="$NoButtonText" HorizontalAlignment="Left" Margin="193,100,0,0" VerticalAlignment="Top" Height="49" Width="84" Background="#FF033C5A" Foreground="White" FontWeight="Normal" FontSize="14" FontStyle="Normal" RenderTransformOrigin="0.446,0.487">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+    </Grid>    
+</Window>
