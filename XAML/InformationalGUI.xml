@@ -2,7 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     Title="$Title" Height="$Height" Width="$Width" ResizeMode="NoResize">
     <Grid Name="MainForm" Background="#FFDDC9A4">
-        <Button Name="OkButton" Content="OK" HorizontalAlignment="Center" Margin="0,124,0,0" VerticalAlignment="Top" Height="25" Width="100" Background="#FF033C5A" Foreground="White" FontWeight="Normal" FontSize="14" FontStyle="Normal">
+        <Button Name="OkButton" Content="$OKButtonText" HorizontalAlignment="Center" Margin="0,124,0,0" VerticalAlignment="Top" Height="25" Width="110" Background="#FF033C5A" Foreground="White" FontWeight="Normal" FontSize="14" FontStyle="Normal">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"/>
