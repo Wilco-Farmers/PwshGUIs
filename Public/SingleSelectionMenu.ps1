@@ -37,20 +37,32 @@ function SingleSelectionMenu {
         [Parameter(Mandatory=$true)]
         [string]$CancelButtonText,
         [Parameter(Mandatory=$true)]
-        [string]$TopText,
-        [Parameter(Mandatory=$false)]
-        [string]$BottomText = "",
-        [Parameter(Mandatory=$false)]
-        [int32]$Width = 250,
-        [Parameter(Mandatory=$false)]
-        [int32]$Height = 250
+        [string]$TopText
     )
-    $GUI = [PwshGUI]::new($Title, $Width, $Height, "SingleSelection")
-    $GUI.AddSingleSelectionList($ItemsInMenu)
-    $GUI.AddOptionsButtons($OKButtonText, $CancelButtonText, 30, 70)
-    if ($BottomText) {
-        $GUI.AddTextOverOptionsButtons($BottomText)
+    [XML]$Form = Get-Content -Path ($PSScriptRoot + "\..\XAML\SingleSelectionGUI.xml")
+    $NodeReader = (New-Object System.Xml.XmlNodeReader $Form)
+    $Window = [Windows.Markup.XamlReader]::Load($NodeReader)
+    $Window.Title = $Title
+    $OKButton = $Window.FindName("SubmitButton")
+    $OKButton.Content = $OKButtonText
+    $OKButton.Add_Click({ #Action that occurs when button is clicked
+        $Window.Close()
+    })
+    $CancelButton = $Window.FindName("CancelButton")
+    $CancelButton.Content = $CancelButtonText
+    $CancelButton.Add_Click({
+        $Window.Close()
+        $CancelButton.IsCancel = $true
+    })
+    $Window.FindName("TextBlockContent").Text = $TopText
+    foreach ($item in $ItemsInMenu) {
+        $Window.FindName("ListItems").Items.Add($item) | Out-Null
     }
-    $GUI.AddTopText($TopText)
-    return $GUI.Display()
+    $Window.ShowDialog() | Out-Null
+    if ($CancelButton.IsCancel) {
+        return $null
+    }
+    else {
+        return $Window.FindName("ListItems").SelectedItem
+    }
 }
