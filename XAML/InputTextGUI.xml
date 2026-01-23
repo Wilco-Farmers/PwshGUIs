@@ -14,7 +14,7 @@
             </Label.RenderTransform>
         </Label>
         <TextBox Name="TextBox" HorizontalAlignment="Left" Margin="197,120,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="265" Height="22"/>
-        <Button Name="OkButton" Content="$OKButtonText" HorizontalAlignment="Left" Margin="133,195,0,0" VerticalAlignment="Top" Height="50" Width="117" Background="#FF033C5A" Foreground="White" FontWeight="Normal" FontSize="14" FontStyle="Normal">
+        <Button Name="OkButton" IsDefault="True" Content="$OKButtonText" HorizontalAlignment="Left" Margin="133,195,0,0" VerticalAlignment="Top" Height="50" Width="117" Background="#FF033C5A" Foreground="White" FontWeight="Normal" FontSize="14" FontStyle="Normal">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"/>
